@@ -22,9 +22,9 @@ public class Movie {
 		
 	}
 	
-	public String getMovieName()
-		return getMovieName;
-
+	public String getMovieName() {
+		return movieName;
+	}
 }
 
-	public String
+	
