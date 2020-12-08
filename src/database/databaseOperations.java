@@ -1,10 +1,11 @@
+package database;
 import java.sql.*;
 import java.util.ArrayList;
 //Basically will import all the classes that will register anything with the database
 
 public class databaseOperations {
 
-	public  Connection getConnection() throws SQLException {
+	public static  Connection getConnection() throws SQLException {
 		
 		final String databaseLocationUrl = "jdbc:mysql://localhost:3306/cinemaDB"; 
 		final String databaseUser = "root";
@@ -17,31 +18,34 @@ public class databaseOperations {
 		
 	}
 	
-	public ArrayList<String> getTimesForAMovie(int movieID) throws SQLException{
+	
+public static   void viewngQuery(String query) throws SQLException{
 		
-		ArrayList<String> times = new ArrayList<String>();
 		
 		Statement myStatement = getConnection().createStatement();
-		ResultSet myRs = myStatement.executeQuery("select * from movies");
-		
-		
-		
-		 
-		
-		
-		
-		
-		
-		return null;
-		
-		
-		
-		
+		ResultSet myRs = myStatement.executeQuery(query);
+		while(myRs.next()) {
+			System.out.println(myRs.getString("movieName") + "," + myRs.getString("movieGenre"));
+		}
 		
 		
 		
 	}
-
+	
+	
+	
+	public static   void adjustingQuery(String query) throws SQLException{
+		
+		
+		Statement myStatement = getConnection().createStatement();
+		myStatement.executeUpdate(query);
+		System.out.println("Insert Complete");
+		
+		
+		
+	}
+	
+	
 
 
 
