@@ -4,54 +4,62 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.TilePane;
+import javafx.scene.layout.VBox;
 
 public class CinemaGUI extends Application {
+	
+	Stage window;
+	Scene loginScene, registerScene;
+	
 	public static void main(String args[]) {
 		launch(args);
 	}
 
 	@Override
-	public void start(Stage stage) {
-		// set title
-		stage.setTitle("Login");
+	public void start(Stage primaryStage) throws Exception {
+		window = primaryStage;
+		window.setTitle("Movie Times");
 		
-		// set layout, padding, and orientation
-		TilePane tilePane = new TilePane();
-		tilePane.setHgap(10);
-		tilePane.setOrientation(Orientation.VERTICAL);
-
-		// create scene and add layout
-		Scene scene = new Scene(tilePane, 350, 250);
+		// Login Page
 		
-		// make labels and textfields
-		Label userLbl = new Label("username");
-		TextField userTxtF = new TextField();
-		Label passwordLbl = new Label("password");
-		TextField passwordTxtF = new TextField();
+		Label loginUserLbl = new Label("username");
+		TextField loginUserTxtF = new TextField();
+		Label loginPasswordLbl = new Label("password");
+		TextField loginPasswordTxtF = new TextField();
 		
-		// make login button and set action
 		Button loginBtn = new Button("Login");
-		loginBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			// button returns value of userTxtF when pressed
-			public void handle(ActionEvent event) {
-				System.out.print(userTxtF.getText());
-			}
-		});
+		loginBtn.setOnAction(e -> System.out.print(loginUserTxtF.getText()));
 		
-		// add elements to layout
-		tilePane.getChildren().add(userLbl);
-		tilePane.getChildren().add(userTxtF);
-		tilePane.getChildren().add(passwordLbl);
-		tilePane.getChildren().add(passwordTxtF);
-		tilePane.getChildren().add(loginBtn);
+		Button createBtn = new Button("Create Account");
+		createBtn.setOnAction(e -> window.setScene(registerScene));
 		
-		// set and show scenes
-		stage.setScene(scene);
-		stage.show();
+		VBox loginLayout = new VBox(10);
+		loginLayout.getChildren().addAll(loginUserLbl, loginUserTxtF, 
+				loginPasswordLbl, loginPasswordTxtF, loginBtn, createBtn);
+		loginScene = new Scene(loginLayout, 200, 250);
+		
+		// New Account Page
+		
+		Label registerUserLbl = new Label("username");
+		TextField registerUserTxtF = new TextField();
+		Label registerPasswordLbl = new Label("password");
+		TextField registerPasswordTxtF = new TextField();
+		
+		Button registerBtn = new Button("Register");
+		registerBtn.setOnAction(e -> System.out.print(
+				"User " + registerUserTxtF.getText() + " created"));
+		
+		Button backBtn = new Button("Back");
+		backBtn.setOnAction(e -> window.setScene(loginScene));
+		
+		VBox registerLayout = new VBox(10);
+		registerLayout.getChildren().addAll(registerUserLbl, registerUserTxtF, 
+				registerPasswordLbl, registerPasswordTxtF, registerBtn, backBtn);
+		registerScene = new Scene(registerLayout, 200, 250);
+		
+		window.setScene(loginScene);
+		window.show();
 	}
 }
