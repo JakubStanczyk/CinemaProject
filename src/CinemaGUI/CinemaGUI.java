@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -38,6 +39,7 @@ public class CinemaGUI extends Application {
 		createBtn.setOnAction(e -> window.setScene(registerScene));
 		
 		VBox loginLayout = new VBox(10);
+		loginLayout.setAlignment(Pos.CENTER);
 		loginLayout.getChildren().addAll(loginUserLbl, loginUserTxtF, 
 				loginPasswordLbl, loginPasswordTxtF, loginBtn, createBtn);
 		loginScene = new Scene(loginLayout, 200, 250);
@@ -57,6 +59,7 @@ public class CinemaGUI extends Application {
 		backLoginBtn.setOnAction(e -> window.setScene(loginScene));
 		
 		VBox registerLayout = new VBox(10);
+		registerLayout.setAlignment(Pos.CENTER);
 		registerLayout.getChildren().addAll(registerUserLbl, registerUserTxtF, 
 				registerPasswordLbl, registerPasswordTxtF, registerBtn, backLoginBtn);
 		registerScene = new Scene(registerLayout, 200, 250);
@@ -81,6 +84,7 @@ public class CinemaGUI extends Application {
 		accountBtn.setOnAction(e -> window.setScene(accountScene));
 		
 		VBox welcomeLayout = new VBox(10);
+		welcomeLayout.setAlignment(Pos.CENTER);
 		welcomeLayout.getChildren().addAll(welcomeLbl, viewMoviesBtn,
 				concessionBtn, viewBookingsBtn, accountBtn);
 		welcomeScene = new Scene(welcomeLayout, 200, 250);
@@ -92,6 +96,7 @@ public class CinemaGUI extends Application {
 		backMovieBtn.setOnAction(e -> window.setScene(welcomeScene));
 		
 		VBox movieLayout = new VBox(10);
+		movieLayout.setAlignment(Pos.CENTER);
 		movieLayout.getChildren().addAll(movieLbl, backMovieBtn);
 		movieScene = new Scene(movieLayout, 200, 250);
 		
@@ -102,6 +107,7 @@ public class CinemaGUI extends Application {
 		backConBtn.setOnAction(e -> window.setScene(welcomeScene));
 		
 		VBox concessionLayout = new VBox(10);
+		concessionLayout.setAlignment(Pos.CENTER);
 		concessionLayout.getChildren().addAll(concessionLbl, backConBtn);
 		concessionScene = new Scene(concessionLayout, 200, 250);
 		
@@ -112,6 +118,7 @@ public class CinemaGUI extends Application {
 		backBookingBtn.setOnAction(e -> window.setScene(welcomeScene));
 		
 		VBox bookingLayout = new VBox(10);
+		bookingLayout.setAlignment(Pos.CENTER);
 		bookingLayout.getChildren().addAll(bookingLbl, backBookingBtn);
 		bookingScene = new Scene(bookingLayout, 200, 250);
 		
@@ -122,6 +129,7 @@ public class CinemaGUI extends Application {
 		backAccountBtn.setOnAction(e -> window.setScene(welcomeScene));
 		
 		VBox accountLayout = new VBox(10);
+		accountLayout.setAlignment(Pos.CENTER);
 		accountLayout.getChildren().addAll(accountLbl, backAccountBtn);
 		accountScene = new Scene(accountLayout, 200, 250);
 	}
