@@ -1,27 +1,19 @@
 package CinemaGUI;
+import java.util.List;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 
-public class CinemaGUI extends Application {
+public class CinemaGUI {
+	static Scene loginScene, registerScene, welcomeScene, movieScene, 
+	concessionScene, bookingScene, accountScene;
 	
-	Stage window;
-	Scene loginScene, registerScene, welcomeScene, movieScene, 
-			concessionScene, bookingScene, accountScene;
-	
-	public static void main(String args[]) {
-		launch(args);
-	}
-
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		window = primaryStage;
+	public static void display() {
+		Stage window = new Stage();
 		window.setTitle("Movie Times");
 		
 		// Login Page
@@ -32,6 +24,7 @@ public class CinemaGUI extends Application {
 		TextField loginPasswordTxtF = new TextField();
 		
 		Button loginBtn = new Button("Login");
+		
 		//loginBtn.setOnAction(e -> System.out.print(loginUserTxtF.getText()));
 		loginBtn.setOnAction(e -> window.setScene(welcomeScene));
 		
@@ -95,8 +88,11 @@ public class CinemaGUI extends Application {
 		Button backMovieBtn = new Button("Back");
 		backMovieBtn.setOnAction(e -> window.setScene(welcomeScene));
 		
+		Button nextMovieBtn = new Button("Next");
+		
 		VBox movieLayout = new VBox(10);
 		movieLayout.setAlignment(Pos.CENTER);
+		
 		movieLayout.getChildren().addAll(movieLbl, backMovieBtn);
 		movieScene = new Scene(movieLayout, 200, 250);
 		
