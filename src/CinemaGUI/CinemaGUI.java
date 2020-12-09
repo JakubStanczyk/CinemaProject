@@ -6,6 +6,7 @@ import javafx.stage.Stage;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 public class CinemaGUI {
@@ -89,22 +90,54 @@ public class CinemaGUI {
 		backMovieBtn.setOnAction(e -> window.setScene(welcomeScene));
 		
 		Button nextMovieBtn = new Button("Next");
+		nextMovieBtn.setOnAction(e -> window.setScene(concessionScene));
 		
 		VBox movieLayout = new VBox(10);
 		movieLayout.setAlignment(Pos.CENTER);
 		
-		movieLayout.getChildren().addAll(movieLbl, backMovieBtn);
+		movieLayout.getChildren().addAll(movieLbl, nextMovieBtn, backMovieBtn);
 		movieScene = new Scene(movieLayout, 200, 250);
 		
 		// Concessions Page
 		
+			// concession top menu
 		Label concessionLbl = new Label("concessions page");
+		
+		VBox concessionTopLayout = new VBox(10);
+		concessionTopLayout.setAlignment(Pos.CENTER);
+		concessionTopLayout.getChildren().add(concessionLbl);
+		
+			// concession left menu
+		ComboBox<String> orderComboBox = new ComboBox<>();
+		orderComboBox.getItems().addAll("popcorn", "drink", "candy");
+		
+		Button addItemBtn = new Button("Add to Order");
+		addItemBtn.setOnAction(e -> addItemtoOrder());
+		
+		VBox concessionLeftLayout = new VBox(10);
+		concessionLeftLayout.setAlignment(Pos.CENTER);
+		concessionLeftLayout.getChildren().addAll(orderComboBox, addItemBtn);
+		
+			// concession right menu
+		Label orderLbl = new Label("order items go here");
+		
+		VBox concessionRightLayout = new VBox(10);
+		concessionRightLayout.setAlignment(Pos.CENTER);
+		concessionRightLayout.getChildren().addAll(orderLbl);
+		
+			// concession bottom menu
 		Button backConBtn = new Button("Back");	
 		backConBtn.setOnAction(e -> window.setScene(welcomeScene));
 		
-		VBox concessionLayout = new VBox(10);
-		concessionLayout.setAlignment(Pos.CENTER);
-		concessionLayout.getChildren().addAll(concessionLbl, backConBtn);
+		VBox concessionBottomLayout = new VBox(10);
+		concessionBottomLayout.setAlignment(Pos.CENTER);
+		concessionBottomLayout.getChildren().add(backConBtn);
+		
+		BorderPane concessionLayout = new BorderPane();
+		concessionLayout.setTop(concessionTopLayout);
+		concessionLayout.setLeft(concessionLeftLayout);
+		concessionLayout.setRight(concessionRightLayout);
+		concessionLayout.setBottom(concessionBottomLayout);
 		concessionScene = new Scene(concessionLayout, 200, 250);
 		
 		// Bookings Page
@@ -128,5 +161,9 @@ public class CinemaGUI {
 		accountLayout.setAlignment(Pos.CENTER);
 		accountLayout.getChildren().addAll(accountLbl, backAccountBtn);
 		accountScene = new Scene(accountLayout, 200, 250);
+	}
+
+	private static void addItemtoOrder() {
+		System.out.println("TODO implement add item to order");
 	}
 }
