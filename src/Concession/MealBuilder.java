@@ -5,11 +5,17 @@ public class MealBuilder {
 	private static String foodType;
 	private static String drink;
 	private static String flavour;
-	private static float drinkPrice;
-	private static float foodPrice;
-	private static float mealPrice;
+	private static double drinkPrice;
+	private static double foodPrice;
+	private static double mealPrice;
 	
-	public MealBuilder(String drinkType, String foodType, String drink, String flavour, float mealPrice) {
+	public MealBuilder(String drinkType, String foodType, String drink, String flavour, double mealPrice) {
+		MealBuilder.drinkType = drinkType;
+		MealBuilder.foodType = foodType;
+		MealBuilder.drink = drink;
+		MealBuilder.flavour = flavour;
+		MealBuilder.mealPrice = mealPrice;
+		System.out.println(drinkType + drink + foodType + flavour + mealPrice);
 	}
 
 	public MealBuilder drinkType(String drinkType) {
@@ -32,13 +38,13 @@ public class MealBuilder {
 		return this;
 	}
 	
-	public MealBuilder drinkPrice(float drinkPrice) {
+	public MealBuilder drinkPrice(double drinkPrice) {
 		MealBuilder.drinkPrice = drinkPrice;	
 		return this;
 	}
 	
 	
-	public MealBuilder foodPrice(float foodPrice) {
+	public MealBuilder foodPrice(double foodPrice) {
 		MealBuilder.foodPrice = foodPrice;
 		return this;
 	}

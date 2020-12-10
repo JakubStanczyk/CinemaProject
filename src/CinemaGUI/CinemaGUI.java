@@ -1,13 +1,11 @@
 package CinemaGUI;
+import Concession.MealBuilder;
 import javafx.stage.Stage;
-import Movie.Movie;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 
 public class CinemaGUI {
@@ -15,8 +13,6 @@ public class CinemaGUI {
 			concessionScene, bookingScene, accountScene;
 	static Scene welcomeManagerScene, manageMovieScene,
 			manageBookingScene, manageConcessionScene;
-	
-	static TableView<Movie> movieTable;
 	
 	public static void display() {
 		Stage window = new Stage();
@@ -121,15 +117,97 @@ public class CinemaGUI {
 		concessionTopLayout.getChildren().add(concessionLbl);
 		
 			// concession left menu
-		ComboBox<String> orderComboBox = new ComboBox<>();
-		orderComboBox.getItems().addAll("popcorn", "drink", "candy");
-		
-		Button addItemBtn = new Button("Add to Order");
-		addItemBtn.setOnAction(e -> addItemtoOrder());
-		
+		ComboBox<String> flavourComboBox = new ComboBox<>();
+		ComboBox<String> foodComboBox = new ComboBox<>();
+		ComboBox<String> drinkTComboBox = new ComboBox<>();
+		ComboBox<String> drinkComboBox = new ComboBox<>();
 		VBox concessionLeftLayout = new VBox(10);
+		ObservableList<String> food = FXCollections.observableArrayList("Popcorn", "Nachos");
+		ObservableList<String> popFlavour = FXCollections.observableArrayList("Salted - 6.99", "Butter - 7.49", "Caramel - 7.99");
+		ObservableList<String> nachFlavour = FXCollections.observableArrayList("Cheese - 5.99","Guacamole - 6.49");
+		ObservableList<String> drinkType = FXCollections.observableArrayList("Hot Drink","Cold Drink");
+		ObservableList<String> drinkHot = FXCollections.observableArrayList("Tea - 2.99","Coffee - 3.49");
+		ObservableList<String> drinkCold = FXCollections.observableArrayList("Coke - 4.99", "Fanta - 4.99", "Sprite - 4.99");
+		Button addItemBtn = new Button("Choose Food");
+		Button addItemBtn2 = new Button("Choose Flavour");
+		Button addItemBtn3 = new Button("Choose Drink");
+		Button addItemBtn4 = new Button("Choose Drink");
+		Button addItemBtn5 = new Button("Complete Order");
+		MealBuilder menu = new MealBuilder(null, null, null, null, 0);
+		foodComboBox.setItems(food);
+		addItemBtn.setOnAction(e -> {
+			if((foodComboBox.getValue().equals("Popcorn"))) { 
+				flavourComboBox.setItems(popFlavour);
+				menu.foodType("Pocporn");
+				addItemBtn2.setOnAction(en -> {
+					if(flavourComboBox.getValue().equals("Salted - 6.99")) {
+						menu.flavour("Salted");
+						menu.foodPrice(6.99);
+					}
+					else if(flavourComboBox.getValue().equals("Butter - 7.49")) {
+						menu.flavour("Butter");
+						menu.foodPrice(7.49);
+					}
+					else if(flavourComboBox.getValue().equals("Caramel - 7.99")) {
+						menu.flavour("Caramel");
+						menu.foodPrice(7.99);
+					}
+				});
+			}
+			else if(foodComboBox.getValue().equals("Nachos")) {
+				flavourComboBox.setItems(nachFlavour);
+				menu.foodType("Nacho");
+				addItemBtn2.setOnAction(en -> {
+					if(flavourComboBox.getValue().equals("Cheese - 5.99")) {
+						menu.flavour("Cheese");
+						menu.foodPrice(5.99);
+					}
+					else if(flavourComboBox.getValue().equals("Guacamole - 6.49")) {
+						menu.flavour("Guacamole");
+						menu.foodPrice(6.49);
+					}
+				});
+			}
+		});
+		drinkTComboBox.setItems(drinkType);
+		addItemBtn3.setOnAction(e ->{
+			if((drinkTComboBox.getValue().equals("Hot Drink"))) {
+				drinkComboBox.setItems(drinkHot);
+				menu.drinkType("Hot Drink");
+				addItemBtn4.setOnAction(en ->{
+					if(drinkComboBox.getValue().equals("Tea - 2.99")){
+						menu.drink("Tea");
+						menu.drinkPrice(2.99);
+					}
+					else if(drinkComboBox.getValue().equals("Coffee - 3.49")) {
+						menu.drink("Coffee");
+						menu.drinkPrice(3.49);
+					}
+				});
+			}
+			else if((drinkTComboBox.getValue().equals("Cold Drink"))) {
+				drinkComboBox.setItems(drinkCold);
+				menu.drinkType("Cold Drink");
+				addItemBtn4.setOnAction(en -> {
+					if(drinkComboBox.getValue().equals("Coke - 4.99")) {
+						menu.drink("Coke");
+						menu.drinkPrice(4.99);
+					}
+					else if(drinkComboBox.getValue().equals("Fanta - 4.99")) {
+						menu.drink("Fanta");
+						menu.drinkPrice(4.99);
+					}
+					else if(drinkComboBox.getValue().equals("Sprite - 4.99")) {
+						menu.drink("Sprite");
+						menu.drinkPrice(4.99);
+					}
+				});
+			}
+		});
+		addItemBtn5.setOnAction(e -> menu.buildMeal());
+		
 		concessionLeftLayout.setAlignment(Pos.CENTER);
-		concessionLeftLayout.getChildren().addAll(orderComboBox, addItemBtn);
+		concessionLeftLayout.getChildren().addAll(foodComboBox,addItemBtn,flavourComboBox, addItemBtn2,drinkTComboBox, addItemBtn3, drinkComboBox, addItemBtn4, addItemBtn5);
 		
 			// concession right menu
 		Label orderLbl = new Label("order items go here");
@@ -208,57 +286,13 @@ public class CinemaGUI {
 		
 		// Manage Movies Page
 		
-			// movie tableview (center layout)
-		TableColumn<Movie, String> movieNameCol = new TableColumn<>("Title");
-		movieNameCol.setMinWidth(200);
-		movieNameCol.setCellValueFactory(new PropertyValueFactory<>("movieName"));
-		
-		TableColumn<Movie, String> movieDateCol = new TableColumn<>("Date");
-		movieDateCol.setMinWidth(100);
-		movieDateCol.setCellValueFactory(new PropertyValueFactory<>("movieDate"));
-		
-		TableColumn<Movie, String> movieTimeCol = new TableColumn<>("Time");
-		movieTimeCol.setMinWidth(100);
-		movieTimeCol.setCellValueFactory(new PropertyValueFactory<>("movieTime"));
-		
-		TableColumn<Movie, String> moviePriceCol = new TableColumn<>("Price");
-		moviePriceCol.setMinWidth(100);
-		moviePriceCol.setCellValueFactory(new PropertyValueFactory<>("moviePrice"));
-		
-		movieTable = new TableView<>();
-		movieTable.setItems(getMovies());
-		movieTable.getColumns().addAll(movieNameCol, movieDateCol, 
-				movieTimeCol, moviePriceCol);
-		
-		VBox movieTableLayout = new VBox(10);
-		movieTableLayout.getChildren().add(movieTable);
-		
-			// bottom layout
 		Button backMgMovieBtn = new Button("Back");	
 		backMgMovieBtn.setOnAction(e -> window.setScene(welcomeManagerScene));
 		
-		Button addMovieBtn = new Button("Add");
-		addMovieBtn.setOnAction(e -> AddMovieWindow.display(movieTable));
-		
-		Button editMovieBtn = new Button("Edit");
-		editMovieBtn.setOnAction(e -> 
-				System.out.println("TODO implement edit movie"));
-		
-		Button deleteMovieBtn = new Button("Delete");
-		deleteMovieBtn.setOnAction(e -> deleteMovie());
-		
-		HBox movieButtonLayout = new HBox(10);
-		
-		movieButtonLayout.setAlignment(Pos.CENTER);
-		movieButtonLayout.setPadding(new Insets(10,10,10,10));
-		movieButtonLayout.getChildren().addAll(addMovieBtn,
-				deleteMovieBtn, backMgMovieBtn);
-		
-			// assemble in final layout
-		BorderPane manageMovieLayout = new BorderPane();
-		manageMovieLayout.setCenter(movieTableLayout);
-		manageMovieLayout.setBottom(movieButtonLayout);
-		manageMovieScene = new Scene(manageMovieLayout, 500, 200);
+		VBox manageMovieLayout = new VBox(10);
+		manageMovieLayout.setAlignment(Pos.CENTER);
+		manageMovieLayout.getChildren().addAll(backMgMovieBtn);
+		manageMovieScene = new Scene(manageMovieLayout, 200, 200);
 		
 		// Manage Bookings Page
 		
@@ -283,20 +317,5 @@ public class CinemaGUI {
 
 	private static void addItemtoOrder() {
 		System.out.println("TODO implement add item to order");
-	}
-	
-	public static ObservableList<Movie> getMovies() {
-		ObservableList<Movie> movies = FXCollections.observableArrayList();
-		movies.add(new Movie("test1", "12/12", "13:00", "10.00"));
-		movies.add(new Movie("test2", "15/12", "18:30", "12.00"));
-		return movies;
-	}
-	
-	public static void deleteMovie() {
-		ObservableList<Movie> movieSelected, allMovies;
-		allMovies = movieTable.getItems();
-		movieSelected = movieTable.getSelectionModel().getSelectedItems();
-		
-		movieSelected.forEach(allMovies::remove);
 	}
 }
