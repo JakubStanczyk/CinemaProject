@@ -21,7 +21,7 @@ public class AlertWindow {
 		Label messageLbl = new Label(message);
 		layout.getChildren().addAll(messageLbl);
 		
-		Scene alertScene = new Scene(layout, 300, 200);
+		Scene alertScene = new Scene(layout, 200, 100);
 		window.setScene(alertScene);
 		window.showAndWait();
 	}
