@@ -25,6 +25,8 @@ public class ChangePasswordWindow {
 		changePassBtn.setOnAction(e -> {
 			if(newPasswordF.getText().equals(confirmPasswordF.getText())) {
 				System.out.println("passwords match\nTODO implement password change");
+				window.close();
+				AlertWindow.display("Success", "Passsword successfully changed");
 			} else {
 				AlertWindow.display("Error", "Passwords don't match");
 			}
