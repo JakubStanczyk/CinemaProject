@@ -7,11 +7,13 @@ import javafx.scene.layout.*;
 
 public class CinemaGUI {
 	static Scene loginScene, registerScene, welcomeScene, movieScene, 
-	concessionScene, bookingScene, accountScene;
+			concessionScene, bookingScene, accountScene;
+	static Scene welcomeManagerScene, manageMovieScene,
+			manageBookingScene, manageConcessionScene;
 	
 	public static void display() {
 		Stage window = new Stage();
-		window.setTitle("Movie Times");
+		window.setTitle("Movies");
 		
 		// Login Page
 		
@@ -21,9 +23,14 @@ public class CinemaGUI {
 		PasswordField loginPasswordPassF = new PasswordField();
 		
 		Button loginBtn = new Button("Login");
-		
-		//loginBtn.setOnAction(e -> System.out.print(loginUserTxtF.getText()));
-		loginBtn.setOnAction(e -> window.setScene(welcomeScene));
+		loginBtn.setOnAction(e -> {
+			System.out.println(loginUserTxtF.getText());
+			if(loginUserTxtF.getText().equals("manager")) {
+				window.setScene(welcomeManagerScene);
+			} else {
+				window.setScene(welcomeScene);
+			}
+		});
 		
 		Button createBtn = new Button("Create Account");
 		createBtn.setOnAction(e -> window.setScene(registerScene));
@@ -57,7 +64,7 @@ public class CinemaGUI {
 		window.setScene(loginScene);
 		window.show();
 		
-		// Welcome Page
+		// Customer Page
 		
 		Label welcomeLbl = new Label("Welcome");
 		
@@ -73,15 +80,18 @@ public class CinemaGUI {
 		Button accountBtn = new Button("Your Account");
 		accountBtn.setOnAction(e -> window.setScene(accountScene));
 		
-		VBox welcomeLayout = new VBox(10);
-		welcomeLayout.setAlignment(Pos.CENTER);
-		welcomeLayout.getChildren().addAll(welcomeLbl, viewMoviesBtn,
-				concessionBtn, viewBookingsBtn, accountBtn);
-		welcomeScene = new Scene(welcomeLayout, 200, 250);
+		Button logoutBtn = new Button("Logout");
+		logoutBtn.setOnAction(e -> window.setScene(loginScene));
 		
-		// Movies Page
+		VBox welcomeCustomerLayout = new VBox(10);
+		welcomeCustomerLayout.setAlignment(Pos.CENTER);
+		welcomeCustomerLayout.getChildren().addAll(welcomeLbl, viewMoviesBtn,
+				concessionBtn, viewBookingsBtn, accountBtn, logoutBtn);
+		welcomeScene = new Scene(welcomeCustomerLayout, 200, 250);
 		
-		Label movieLbl = new Label("move times page");
+		// View Movies Page
+		
+		Label viewMovieLbl = new Label("move times page");
 		Button backMovieBtn = new Button("Back");
 		backMovieBtn.setOnAction(e -> window.setScene(welcomeScene));
 		
@@ -91,7 +101,7 @@ public class CinemaGUI {
 		VBox movieLayout = new VBox(10);
 		movieLayout.setAlignment(Pos.CENTER);
 		
-		movieLayout.getChildren().addAll(movieLbl, nextMovieBtn, backMovieBtn);
+		movieLayout.getChildren().addAll(viewMovieLbl, nextMovieBtn, backMovieBtn);
 		movieScene = new Scene(movieLayout, 200, 250);
 		
 		// Concessions Page
@@ -166,6 +176,58 @@ public class CinemaGUI {
 		accountLayout.getChildren().addAll(accountLbl, changePassButton, 
 				deleteButton, backAccountBtn);
 		accountScene = new Scene(accountLayout, 200, 250);
+		
+		// Manager Page
+		
+		Label welcomeManagerLbl = new Label("Welcome");
+		
+		Button manageMoviesBtn = new Button("Manage Movies");
+		manageMoviesBtn.setOnAction(e -> window.setScene(manageMovieScene));
+		
+		Button manageBookingBtn = new Button("Manage Bookings");
+		manageBookingBtn.setOnAction(e -> window.setScene(manageBookingScene));
+		
+		Button manageConcessionBtn = new Button("Manage Inventory");
+		manageConcessionBtn.setOnAction(e -> window.setScene(manageConcessionScene));
+		
+		Button managerLogoutBtn = new Button("Logout");
+		managerLogoutBtn.setOnAction(e -> window.setScene(loginScene));
+		
+		VBox welcomeManagerLayout = new VBox(10);
+		welcomeManagerLayout.setAlignment(Pos.CENTER);
+		welcomeManagerLayout.getChildren().addAll(welcomeManagerLbl, manageMoviesBtn,
+				manageBookingBtn, manageConcessionBtn, managerLogoutBtn);
+		welcomeManagerScene = new Scene(welcomeManagerLayout, 200, 250);
+		
+		// Manage Movies Page
+		
+		Button backMgMovieBtn = new Button("Back");	
+		backMgMovieBtn.setOnAction(e -> window.setScene(welcomeManagerScene));
+		
+		VBox manageMovieLayout = new VBox(10);
+		manageMovieLayout.setAlignment(Pos.CENTER);
+		manageMovieLayout.getChildren().addAll(backMgMovieBtn);
+		manageMovieScene = new Scene(manageMovieLayout, 200, 200);
+		
+		// Manage Bookings Page
+		
+		Button backMgBookingBtn = new Button("Back");	
+		backMgBookingBtn.setOnAction(e -> window.setScene(welcomeManagerScene));
+		
+		VBox manageBookingLayout = new VBox(10);
+		manageBookingLayout.setAlignment(Pos.CENTER);
+		manageBookingLayout.getChildren().addAll(backMgBookingBtn);
+		manageBookingScene = new Scene(manageBookingLayout, 200, 200);
+		
+		// Manage Inventory Page
+		
+		Button backMgConcessionBtn = new Button("Back");	
+		backMgConcessionBtn.setOnAction(e -> window.setScene(welcomeManagerScene));
+		
+		VBox manageConcessionLayout = new VBox(10);
+		manageConcessionLayout.setAlignment(Pos.CENTER);
+		manageConcessionLayout.getChildren().addAll(backMgConcessionBtn);
+		manageConcessionScene = new Scene(manageConcessionLayout, 200, 200);
 	}
 
 	private static void addItemtoOrder() {
