@@ -1,30 +1,22 @@
 
 public class Movie {
 	
-	int movieId;
-	String movieName;
-	String movieGenre;
+	String movieName, movieDate;
+	int movieTime, moviePrice;
 	
-	public Movie() {
-		
-	}
-	
-	public Movie(int movieID, String movieName, String movieGenre)
+	public Movie(String movieName, String movieDate, int movieTime, int moviePrice)
 	{
-		this.movieId = movieID;
 		this.movieName = movieName;
-		this.movieGenre = movieGenre;
-		
+		this.movieDate = movieDate;
+		this.movieTime = movieTime;
+		this.moviePrice = moviePrice;
 	}
 	
-	public int getMovieId() {
-		return movieId;
-		
+	public String getMovieName() {
+		return movieName;
 	}
 	
-	public String getMovieName()
-		return getMovieName;
-
+	public String getMovieDate() {
+		return movieDate;
+	}
 }
-
-	public String
