@@ -2,10 +2,9 @@ package Movie;
 
 public class Movie {
 	
-	String movieName, movieDate, movieTime;
-	double moviePrice;
+	String movieName, movieDate, movieTime, moviePrice;
 	
-	public Movie(String movieName, String movieDate, String movieTime, double moviePrice)
+	public Movie(String movieName, String movieDate, String movieTime, String moviePrice)
 	{
 		this.movieName = movieName;
 		this.movieDate = movieDate;
@@ -25,7 +24,7 @@ public class Movie {
 		return movieTime;
 	}
 	
-	public double getMoviePrice() {
+	public String getMoviePrice() {
 		return moviePrice;
 	}
 }
