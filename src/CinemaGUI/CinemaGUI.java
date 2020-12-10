@@ -1,13 +1,9 @@
 package CinemaGUI;
-import java.util.List;
-
-import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 public class CinemaGUI {
 	static Scene loginScene, registerScene, welcomeScene, movieScene, 
@@ -154,12 +150,19 @@ public class CinemaGUI {
 		// Account Page
 		
 		Label accountLbl = new Label("account page");
+	
+		Button changePassButton = new Button("Change Password");
+		changePassButton.setOnAction(e -> System.out.println("TODO implement change password"));
+		Button deleteButton = new Button("Delete Account");
+		deleteButton.setOnAction(e -> ConfirmWindow.display());
+		
 		Button backAccountBtn = new Button("Back");	
 		backAccountBtn.setOnAction(e -> window.setScene(welcomeScene));
 		
 		VBox accountLayout = new VBox(10);
 		accountLayout.setAlignment(Pos.CENTER);
-		accountLayout.getChildren().addAll(accountLbl, backAccountBtn);
+		accountLayout.getChildren().addAll(accountLbl, changePassButton, 
+				deleteButton, backAccountBtn);
 		accountScene = new Scene(accountLayout, 200, 250);
 	}
 
