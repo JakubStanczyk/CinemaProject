@@ -3,6 +3,7 @@ import javafx.stage.Stage;
 import Movie.Movie;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -220,7 +221,7 @@ public class CinemaGUI {
 		movieTimeCol.setMinWidth(100);
 		movieTimeCol.setCellValueFactory(new PropertyValueFactory<>("movieTime"));
 		
-		TableColumn<Movie, Double> moviePriceCol = new TableColumn<>("Price");
+		TableColumn<Movie, String> moviePriceCol = new TableColumn<>("Price");
 		moviePriceCol.setMinWidth(100);
 		moviePriceCol.setCellValueFactory(new PropertyValueFactory<>("moviePrice"));
 		
@@ -236,17 +237,21 @@ public class CinemaGUI {
 		Button backMgMovieBtn = new Button("Back");	
 		backMgMovieBtn.setOnAction(e -> window.setScene(welcomeManagerScene));
 		
+		Button addMovieBtn = new Button("Add");
+		addMovieBtn.setOnAction(e -> AddMovieWindow.display(movieTable));
+		
 		Button editMovieBtn = new Button("Edit");
 		editMovieBtn.setOnAction(e -> 
 				System.out.println("TODO implement edit movie"));
 		
 		Button deleteMovieBtn = new Button("Delete");
-		deleteMovieBtn.setOnAction(e -> 
-				System.out.println("TODO implement delete movie"));
+		deleteMovieBtn.setOnAction(e -> deleteMovie());
 		
 		HBox movieButtonLayout = new HBox(10);
+		
 		movieButtonLayout.setAlignment(Pos.CENTER);
-		movieButtonLayout.getChildren().addAll(editMovieBtn, 
+		movieButtonLayout.setPadding(new Insets(10,10,10,10));
+		movieButtonLayout.getChildren().addAll(addMovieBtn,
 				deleteMovieBtn, backMgMovieBtn);
 		
 			// assemble in final layout
@@ -282,8 +287,16 @@ public class CinemaGUI {
 	
 	public static ObservableList<Movie> getMovies() {
 		ObservableList<Movie> movies = FXCollections.observableArrayList();
-		movies.add(new Movie("test1", "12/12", "13:00", 10.00));
-		movies.add(new Movie("test2", "15/12", "18:30", 12.00));
+		movies.add(new Movie("test1", "12/12", "13:00", "10.00"));
+		movies.add(new Movie("test2", "15/12", "18:30", "12.00"));
 		return movies;
+	}
+	
+	public static void deleteMovie() {
+		ObservableList<Movie> movieSelected, allMovies;
+		allMovies = movieTable.getItems();
+		movieSelected = movieTable.getSelectionModel().getSelectedItems();
+		
+		movieSelected.forEach(allMovies::remove);
 	}
 }
