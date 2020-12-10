@@ -18,7 +18,7 @@ public class CinemaGUI {
 		Label loginUserLbl = new Label("username");
 		TextField loginUserTxtF = new TextField();
 		Label loginPasswordLbl = new Label("password");
-		TextField loginPasswordTxtF = new TextField();
+		PasswordField loginPasswordPassF = new PasswordField();
 		
 		Button loginBtn = new Button("Login");
 		
@@ -31,7 +31,7 @@ public class CinemaGUI {
 		VBox loginLayout = new VBox(10);
 		loginLayout.setAlignment(Pos.CENTER);
 		loginLayout.getChildren().addAll(loginUserLbl, loginUserTxtF, 
-				loginPasswordLbl, loginPasswordTxtF, loginBtn, createBtn);
+				loginPasswordLbl, loginPasswordPassF, loginBtn, createBtn);
 		loginScene = new Scene(loginLayout, 200, 250);
 		
 		// New Account Page
@@ -152,7 +152,9 @@ public class CinemaGUI {
 		Label accountLbl = new Label("account page");
 	
 		Button changePassButton = new Button("Change Password");
-		changePassButton.setOnAction(e -> System.out.println("TODO implement change password"));
+		changePassButton.setOnAction(e -> {
+			ChangePasswordWindow.display();
+		});
 		Button deleteButton = new Button("Delete Account");
 		deleteButton.setOnAction(e -> ConfirmWindow.display());
 		

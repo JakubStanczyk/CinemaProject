@@ -9,7 +9,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class ConfirmWindow {
-	
 	public static void display() {
 		Stage window = new Stage();
 		window.setTitle("Delete Account");
