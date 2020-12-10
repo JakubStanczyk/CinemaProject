@@ -1,8 +1,12 @@
 package CinemaGUI;
 import javafx.stage.Stage;
+import Movie.Movie;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 
 public class CinemaGUI {
@@ -10,6 +14,8 @@ public class CinemaGUI {
 			concessionScene, bookingScene, accountScene;
 	static Scene welcomeManagerScene, manageMovieScene,
 			manageBookingScene, manageConcessionScene;
+	
+	static TableView<Movie> movieTable;
 	
 	public static void display() {
 		Stage window = new Stage();
@@ -201,13 +207,36 @@ public class CinemaGUI {
 		
 		// Manage Movies Page
 		
+			// movie tableview
+		TableColumn<Movie, String> movieNameCol = new TableColumn<>("Title");
+		movieNameCol.setMinWidth(200);
+		movieNameCol.setCellValueFactory(new PropertyValueFactory<>("movieName"));
+		
+		TableColumn<Movie, String> movieDateCol = new TableColumn<>("Date");
+		movieDateCol.setMinWidth(100);
+		movieDateCol.setCellValueFactory(new PropertyValueFactory<>("movieDate"));
+		
+		TableColumn<Movie, String> movieTimeCol = new TableColumn<>("Time");
+		movieTimeCol.setMinWidth(100);
+		movieTimeCol.setCellValueFactory(new PropertyValueFactory<>("movieTime"));
+		
+		TableColumn<Movie, Double> moviePriceCol = new TableColumn<>("Price");
+		moviePriceCol.setMinWidth(100);
+		moviePriceCol.setCellValueFactory(new PropertyValueFactory<>("moviePrice"));
+		
+		movieTable = new TableView<>();
+		movieTable.setItems(getMovies());
+		movieTable.getColumns().addAll(movieNameCol, movieDateCol, 
+				movieTimeCol, moviePriceCol);
+		
+			// back button
 		Button backMgMovieBtn = new Button("Back");	
 		backMgMovieBtn.setOnAction(e -> window.setScene(welcomeManagerScene));
 		
 		VBox manageMovieLayout = new VBox(10);
 		manageMovieLayout.setAlignment(Pos.CENTER);
-		manageMovieLayout.getChildren().addAll(backMgMovieBtn);
-		manageMovieScene = new Scene(manageMovieLayout, 200, 200);
+		manageMovieLayout.getChildren().addAll(movieTable, backMgMovieBtn);
+		manageMovieScene = new Scene(manageMovieLayout, 500, 200);
 		
 		// Manage Bookings Page
 		
@@ -232,5 +261,12 @@ public class CinemaGUI {
 
 	private static void addItemtoOrder() {
 		System.out.println("TODO implement add item to order");
+	}
+	
+	public static ObservableList<Movie> getMovies() {
+		ObservableList<Movie> movies = FXCollections.observableArrayList();
+		movies.add(new Movie("test1", "12/12", "13:00", 10.00));
+		movies.add(new Movie("test2", "15/12", "18:30", 12.00));
+		return movies;
 	}
 }
