@@ -207,7 +207,7 @@ public class CinemaGUI {
 		
 		// Manage Movies Page
 		
-			// movie tableview
+			// movie tableview (center layout)
 		TableColumn<Movie, String> movieNameCol = new TableColumn<>("Title");
 		movieNameCol.setMinWidth(200);
 		movieNameCol.setCellValueFactory(new PropertyValueFactory<>("movieName"));
@@ -229,13 +229,30 @@ public class CinemaGUI {
 		movieTable.getColumns().addAll(movieNameCol, movieDateCol, 
 				movieTimeCol, moviePriceCol);
 		
-			// back button
+		VBox movieTableLayout = new VBox(10);
+		movieTableLayout.getChildren().add(movieTable);
+		
+			// bottom layout
 		Button backMgMovieBtn = new Button("Back");	
 		backMgMovieBtn.setOnAction(e -> window.setScene(welcomeManagerScene));
 		
-		VBox manageMovieLayout = new VBox(10);
-		manageMovieLayout.setAlignment(Pos.CENTER);
-		manageMovieLayout.getChildren().addAll(movieTable, backMgMovieBtn);
+		Button editMovieBtn = new Button("Edit");
+		editMovieBtn.setOnAction(e -> 
+				System.out.println("TODO implement edit movie"));
+		
+		Button deleteMovieBtn = new Button("Delete");
+		deleteMovieBtn.setOnAction(e -> 
+				System.out.println("TODO implement delete movie"));
+		
+		HBox movieButtonLayout = new HBox(10);
+		movieButtonLayout.setAlignment(Pos.CENTER);
+		movieButtonLayout.getChildren().addAll(editMovieBtn, 
+				deleteMovieBtn, backMgMovieBtn);
+		
+			// assemble in final layout
+		BorderPane manageMovieLayout = new BorderPane();
+		manageMovieLayout.setCenter(movieTableLayout);
+		manageMovieLayout.setBottom(movieButtonLayout);
 		manageMovieScene = new Scene(manageMovieLayout, 500, 200);
 		
 		// Manage Bookings Page
