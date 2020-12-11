@@ -1,11 +1,14 @@
 package CinemaGUI;
 import Concession.MealBuilder;
 import javafx.stage.Stage;
+import Movie.Movie;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 
 public class CinemaGUI {
@@ -13,6 +16,8 @@ public class CinemaGUI {
 			concessionScene, bookingScene, accountScene;
 	static Scene welcomeManagerScene, manageMovieScene,
 			manageBookingScene, manageConcessionScene;
+	
+	static TableView<Movie> movieTable;
 	
 	public static void display() {
 		Stage window = new Stage();
@@ -121,6 +126,7 @@ public class CinemaGUI {
 		ComboBox<String> foodComboBox = new ComboBox<>();
 		ComboBox<String> drinkTComboBox = new ComboBox<>();
 		ComboBox<String> drinkComboBox = new ComboBox<>();
+
 		VBox concessionLeftLayout = new VBox(10);
 		ObservableList<String> food = FXCollections.observableArrayList("Popcorn", "Nachos");
 		ObservableList<String> popFlavour = FXCollections.observableArrayList("Salted - 6.99", "Butter - 7.49", "Caramel - 7.99");
@@ -286,13 +292,57 @@ public class CinemaGUI {
 		
 		// Manage Movies Page
 		
+			// movie tableview (center layout)
+		TableColumn<Movie, String> movieNameCol = new TableColumn<>("Title");
+		movieNameCol.setMinWidth(200);
+		movieNameCol.setCellValueFactory(new PropertyValueFactory<>("movieName"));
+		
+		TableColumn<Movie, String> movieDateCol = new TableColumn<>("Date");
+		movieDateCol.setMinWidth(100);
+		movieDateCol.setCellValueFactory(new PropertyValueFactory<>("movieDate"));
+		
+		TableColumn<Movie, String> movieTimeCol = new TableColumn<>("Time");
+		movieTimeCol.setMinWidth(100);
+		movieTimeCol.setCellValueFactory(new PropertyValueFactory<>("movieTime"));
+		
+		TableColumn<Movie, String> moviePriceCol = new TableColumn<>("Price");
+		moviePriceCol.setMinWidth(100);
+		moviePriceCol.setCellValueFactory(new PropertyValueFactory<>("moviePrice"));
+		
+		movieTable = new TableView<>();
+		movieTable.setItems(getMovies());
+		movieTable.getColumns().addAll(movieNameCol, movieDateCol, 
+				movieTimeCol, moviePriceCol);
+		
+		VBox movieTableLayout = new VBox(10);
+		movieTableLayout.getChildren().add(movieTable);
+		
+			// bottom layout
 		Button backMgMovieBtn = new Button("Back");	
 		backMgMovieBtn.setOnAction(e -> window.setScene(welcomeManagerScene));
 		
-		VBox manageMovieLayout = new VBox(10);
-		manageMovieLayout.setAlignment(Pos.CENTER);
-		manageMovieLayout.getChildren().addAll(backMgMovieBtn);
-		manageMovieScene = new Scene(manageMovieLayout, 200, 200);
+		Button addMovieBtn = new Button("Add");
+		addMovieBtn.setOnAction(e -> AddMovieWindow.display(movieTable));
+		
+		Button editMovieBtn = new Button("Edit");
+		editMovieBtn.setOnAction(e -> 
+				System.out.println("TODO implement edit movie"));
+		
+		Button deleteMovieBtn = new Button("Delete");
+		deleteMovieBtn.setOnAction(e -> deleteMovie());
+		
+		HBox movieButtonLayout = new HBox(10);
+		
+		movieButtonLayout.setAlignment(Pos.CENTER);
+		movieButtonLayout.setPadding(new Insets(10,10,10,10));
+		movieButtonLayout.getChildren().addAll(addMovieBtn,
+				deleteMovieBtn, backMgMovieBtn);
+		
+			// assemble in final layout
+		BorderPane manageMovieLayout = new BorderPane();
+		manageMovieLayout.setCenter(movieTableLayout);
+		manageMovieLayout.setBottom(movieButtonLayout);
+		manageMovieScene = new Scene(manageMovieLayout, 500, 200);
 		
 		// Manage Bookings Page
 		
@@ -317,5 +367,20 @@ public class CinemaGUI {
 
 	private static void addItemtoOrder() {
 		System.out.println("TODO implement add item to order");
+	}
+	
+	public static ObservableList<Movie> getMovies() {
+		ObservableList<Movie> movies = FXCollections.observableArrayList();
+		movies.add(new Movie("test1", "12/12", "13:00", "10.00"));
+		movies.add(new Movie("test2", "15/12", "18:30", "12.00"));
+		return movies;
+	}
+	
+	public static void deleteMovie() {
+		ObservableList<Movie> movieSelected, allMovies;
+		allMovies = movieTable.getItems();
+		movieSelected = movieTable.getSelectionModel().getSelectedItems();
+		
+		movieSelected.forEach(allMovies::remove);
 	}
 }
