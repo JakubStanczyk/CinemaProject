@@ -26,14 +26,16 @@ public class Account {
 
 		String Query = "insert into accountDeatails values('"+username+"','"+password+"')";
 		databaseOperations.adjustingQuery(Query);
-		
-		
-		
-		
-		
-		
-		
-		
+	}
+	
+	public static void changeAccountPassword(String username,String password) throws SQLException{
+		String Query = "update accountDeatails set password='"+password+"' where username='"+username+"'";
+		databaseOperations.adjustingQuery(Query);
+	}
+	
+	public static void removeAccount(String username) throws SQLException {
+		String Query = "delete from accountDeatails where username='"+username+"'";
+		databaseOperations.adjustingQuery(Query);
 	}
 	
 	

@@ -289,10 +289,14 @@ public class CinemaGUI {
 	
 		Button changePassButton = new Button("Change Password");
 		changePassButton.setOnAction(e -> {
-			ChangePasswordWindow.display();
+			ChangePasswordWindow.display(account.getUserName());
 		});
 		Button deleteButton = new Button("Delete Account");
-		deleteButton.setOnAction(e -> ConfirmWindow.display());
+		deleteButton.setOnAction(e -> {
+			ConfirmWindow.display(account.getUserName());
+			window.setScene(loginScene);
+			}
+		);
 		
 		Button backAccountBtn = new Button("Back");	
 		backAccountBtn.setOnAction(e -> window.setScene(welcomeScene));

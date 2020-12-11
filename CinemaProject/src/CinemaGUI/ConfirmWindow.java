@@ -1,6 +1,10 @@
 package CinemaGUI;
 
 import javafx.geometry.Insets;
+
+import java.sql.SQLException;
+
+import Account.Account;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -9,7 +13,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class ConfirmWindow {
-	public static void display() {
+	public static void display(String username) {
 		Stage window = new Stage();
 		window.setTitle("Delete Account");
 		
@@ -18,9 +22,18 @@ public class ConfirmWindow {
 		
 		Label confirmLbl = new Label("Are you sure you want to delete your account?");
 		Button yesBtn = new Button("Yes, Delete my Account");
-		yesBtn.setOnAction(e -> System.out.println("TODO implement delete account"));
+		yesBtn.setOnAction(e -> {
+			try {
+				Account.removeAccount(username);
+			} catch (SQLException e2) {
+			}
+			window.close();
+			
+		});
 		Button noBtn = new Button("No, Keep my Account");
-		noBtn.setOnAction(e -> window.close());
+		noBtn.setOnAction(e ->window.close());
+				
+				
 		
 		VBox layout = new VBox(10);
 		layout.setPadding(new Insets(10,10,10,10));

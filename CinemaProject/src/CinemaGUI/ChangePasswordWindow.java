@@ -1,5 +1,8 @@
 package CinemaGUI;
 
+import java.sql.SQLException;
+
+import Account.Account;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -9,7 +12,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class ChangePasswordWindow {
-	public static void display() {
+	public static void display(String username) {
 		Stage window = new Stage();
 		window.setTitle("Delete Account");
 		
@@ -24,7 +27,14 @@ public class ChangePasswordWindow {
 		Button changePassBtn = new Button("Change Password");
 		changePassBtn.setOnAction(e -> {
 			if(newPasswordF.getText().equals(confirmPasswordF.getText())) {
-				System.out.println("passwords match\nTODO implement password change");
+				
+				
+			
+				try {
+					Account.changeAccountPassword(username,confirmPasswordF.getText());
+				} catch (SQLException e1) {
+				}
+				
 				window.close();
 				AlertWindow.display("Success", "Passsword successfully changed");
 			} else {
