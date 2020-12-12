@@ -1,5 +1,9 @@
 package Movie;
 
+import java.sql.SQLException;
+
+import Database.databaseOperations;
+
 public class Movie {
 	
 	String movieName, movieDate, movieTime, moviePrice;
@@ -27,4 +31,12 @@ public class Movie {
 	public String getMoviePrice() {
 		return moviePrice;
 	}
+	
+	public void managerAddMovieToDB(String movieName,String movieDate,String movieTime, String moviePrice) throws SQLException {
+		
+		String Query = "insert into movies values('"+movieName+"','"+movieDate+"','"+movieTime+"','"+moviePrice+"')";
+		databaseOperations.adjustingQuery(Query);
+	}
+	
+	
 }
