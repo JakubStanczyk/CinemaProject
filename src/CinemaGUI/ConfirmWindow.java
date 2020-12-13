@@ -18,7 +18,11 @@ public class ConfirmWindow {
 		
 		Label confirmLbl = new Label("Are you sure you want to delete your account?");
 		Button yesBtn = new Button("Yes, Delete my Account");
-		yesBtn.setOnAction(e -> System.out.println("TODO implement delete account"));
+		yesBtn.setOnAction(e -> {
+			System.out.println("TODO implement delete account");
+			AlertWindow.display("Success", "Account Successfully Deleted");
+			window.close();
+		});
 		Button noBtn = new Button("No, Keep my Account");
 		noBtn.setOnAction(e -> window.close());
 		
