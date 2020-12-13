@@ -38,6 +38,8 @@ public class CinemaGUI {
 			} else {
 				window.setScene(welcomeScene);
 			}
+			loginUserTxtF.clear();
+			loginPasswordPassF.clear();
 		});
 		
 		Button createBtn = new Button("Create Account");
@@ -257,7 +259,10 @@ public class CinemaGUI {
 			ChangePasswordWindow.display();
 		});
 		Button deleteButton = new Button("Delete Account");
-		deleteButton.setOnAction(e -> ConfirmWindow.display());
+		deleteButton.setOnAction(e -> {
+			ConfirmWindow.display();
+			window.setScene(loginScene);
+		});
 		
 		Button backAccountBtn = new Button("Back");	
 		backAccountBtn.setOnAction(e -> window.setScene(welcomeScene));
