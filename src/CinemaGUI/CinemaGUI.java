@@ -25,33 +25,11 @@ public class CinemaGUI {
 		
 		// instantiate and populate tables
 		
-		TableColumn<Movie, String> movieNameCol = new TableColumn<>("Title");
-		movieNameCol.setMinWidth(200);
-		movieNameCol.setCellValueFactory(new PropertyValueFactory<>("movieName"));
-		
-		TableColumn<Movie, String> movieDateCol = new TableColumn<>("Date");
-		movieDateCol.setMinWidth(100);
-		movieDateCol.setCellValueFactory(new PropertyValueFactory<>("movieDate"));
-		
-		TableColumn<Movie, String> movieTimeCol = new TableColumn<>("Time");
-		movieTimeCol.setMinWidth(100);
-		movieTimeCol.setCellValueFactory(new PropertyValueFactory<>("movieTime"));
-		
-		TableColumn<Movie, String> moviePriceCol = new TableColumn<>("Price");
-		moviePriceCol.setMinWidth(100);
-		moviePriceCol.setCellValueFactory(new PropertyValueFactory<>("moviePrice"));
-		
-			// manager/base table
-		movieTable = new TableView<>();
+		movieTable = createMovieTable();
 		movieTable.setItems(getMovies());
-		movieTable.getColumns().addAll(movieNameCol, movieDateCol, 
-				movieTimeCol, moviePriceCol);
-		
-			// customer table (references manager table)
-		viewMovieTable = new TableView<>();
+
+		viewMovieTable = createMovieTable();
 		viewMovieTable.setItems(movieTable.getItems());
-		viewMovieTable.getColumns().addAll(movieNameCol, movieDateCol, 
-				movieTimeCol, moviePriceCol);
 		
 		// Login Page
 		
@@ -288,27 +266,9 @@ public class CinemaGUI {
 		Label bookingLbl = new Label("bookings page");
 		Button backBookingBtn = new Button("Back");	
 		backBookingBtn.setOnAction(e -> window.setScene(welcomeScene));
-		
-		TableColumn<Movie, String> bookingNameCol = new TableColumn<>("Title");
-		bookingNameCol.setMinWidth(200);
-		bookingNameCol.setCellValueFactory(new PropertyValueFactory<>("movieName"));
-		
-		TableColumn<Movie, String> bookingDateCol = new TableColumn<>("Date");
-		bookingDateCol.setMinWidth(100);
-		bookingDateCol.setCellValueFactory(new PropertyValueFactory<>("movieDate"));
-		
-		TableColumn<Movie, String> bookingTimeCol = new TableColumn<>("Time");
-		bookingTimeCol.setMinWidth(100);
-		bookingTimeCol.setCellValueFactory(new PropertyValueFactory<>("movieTime"));
-		
-		TableColumn<Movie, String> bookingPriceCol = new TableColumn<>("Price");
-		bookingPriceCol.setMinWidth(100);
-		bookingPriceCol.setCellValueFactory(new PropertyValueFactory<>("moviePrice"));
-		
-		bookingTable = new TableView<>();
+
+		bookingTable = createMovieTable();
 		bookingTable.setItems(getBookings());
-		bookingTable.getColumns().addAll(bookingNameCol, bookingDateCol, 
-				bookingTimeCol, bookingPriceCol);
 		
 		VBox bookingLayout = new VBox(10);
 		bookingLayout.setAlignment(Pos.CENTER);
@@ -410,6 +370,29 @@ public class CinemaGUI {
 		manageConcessionLayout.setAlignment(Pos.CENTER);
 		manageConcessionLayout.getChildren().addAll(backMgConcessionBtn);
 		manageConcessionScene = new Scene(manageConcessionLayout, 200, 200);
+	}
+
+	private static TableView<Movie> createMovieTable() {
+		TableColumn<Movie, String> movieNameCol = new TableColumn<>("Title");
+		movieNameCol.setMinWidth(200);
+		movieNameCol.setCellValueFactory(new PropertyValueFactory<>("movieName"));
+		
+		TableColumn<Movie, String> movieDateCol = new TableColumn<>("Date");
+		movieDateCol.setMinWidth(100);
+		movieDateCol.setCellValueFactory(new PropertyValueFactory<>("movieDate"));
+		
+		TableColumn<Movie, String> movieTimeCol = new TableColumn<>("Time");
+		movieTimeCol.setMinWidth(100);
+		movieTimeCol.setCellValueFactory(new PropertyValueFactory<>("movieTime"));
+		
+		TableColumn<Movie, String> moviePriceCol = new TableColumn<>("Price");
+		moviePriceCol.setMinWidth(100);
+		moviePriceCol.setCellValueFactory(new PropertyValueFactory<>("moviePrice"));
+
+		TableView<Movie> table = new TableView<>();
+		table.getColumns().addAll(movieNameCol, movieDateCol, movieTimeCol, moviePriceCol);
+		
+		return table;
 	}
 
 	private static void addItemtoOrder() {
