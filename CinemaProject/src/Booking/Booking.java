@@ -7,7 +7,6 @@ import Concession.MealBuilder;
 import Database.databaseOperations;
 
 public class Booking {
-	private String bookingID;
 	
 	
 	
@@ -25,6 +24,12 @@ public class Booking {
 		databaseOperations.adjustingQuery(Query);
 		System.out.println(Query);
 		
+		
+	}
+	
+	public static void deleteBookingFromDB(String bookingID) throws SQLException{
+		
+		String Query = "delete from booking where bookingID ='"+bookingID+"'";
 		
 	}
 

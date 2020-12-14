@@ -21,7 +21,30 @@ public class databaseOperations {
 	}
 	
 	
-	public static   ArrayList<Movie> viewingMovieQuery(String query) throws SQLException{
+	public static   ArrayList<Movie> viewingQuery(String query) throws SQLException{
+		
+		ArrayList<Movie>dataInputs = new ArrayList<Movie>();
+		
+		Statement myStatement = getConnection().createStatement();
+		ResultSet myRs = myStatement.executeQuery(query);
+		ArrayList<String> temp = new ArrayList<String>();
+		while(myRs.next()) {
+			if (query == "select * from movies") {
+			dataInputs.add(new Movie(myRs.getString("movieName"),myRs.getString("movieDate"),myRs.getString("movieTime"),myRs.getDouble("moviePrice")));
+			}else {
+				datainputs.add(new Booking)
+			}
+		}
+		
+		return dataInputs;
+		
+		
+
+		
+	}
+	
+	
+	public static   ArrayList<Movie> viewingBookingQuery(String query) throws SQLException{
 		
 		ArrayList<Movie>dataInputs = new ArrayList<Movie>();
 		
@@ -34,9 +57,14 @@ public class databaseOperations {
 		
 		return dataInputs;
 		
+		
 
 		
 	}
+	
+	
+	
+	
 	
 	public static boolean doesUserExists(String username,String password)throws SQLException{
 		Statement myStatement = getConnection().createStatement();

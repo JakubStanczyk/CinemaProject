@@ -497,7 +497,7 @@ public class CinemaGUI {
 	
 	public static ObservableList<Movie> getMovies() throws SQLException {
 		ObservableList<Movie> movies = FXCollections.observableArrayList();
-		ArrayList<Movie> moviesFromDB = databaseOperations.viewingMovieQuery("select * from movies");
+		ArrayList<Movie> moviesFromDB = databaseOperations.viewingQuery("select * from movies");
 		for (int i = 0; i < moviesFromDB.size();i++) {
 			movies.add(moviesFromDB.get(i));
 		}
