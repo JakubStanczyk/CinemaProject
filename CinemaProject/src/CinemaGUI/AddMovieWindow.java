@@ -18,10 +18,10 @@ public class AddMovieWindow {
 	public static void display(TableView<Movie> movieList) {
 		Stage window = new Stage();
 		window.setTitle("Add Movie");
-		
+
 		window.initModality(Modality.APPLICATION_MODAL);
 		window.setMaxWidth(300);
-		
+
 		TextField movieNameTxtF = new TextField();
 		movieNameTxtF.setPromptText("Title");
 		TextField movieDateTxtF = new TextField();
@@ -30,34 +30,33 @@ public class AddMovieWindow {
 		movieNameTxtF.setPromptText("Time");
 		TextField moviePriceTxtF = new TextField();
 		movieNameTxtF.setPromptText("Price");
-		
+
 		Button submitBtn = new Button("Submit");
 		submitBtn.setOnAction(e -> {
-			Movie newMovie = new Movie(movieNameTxtF.getText(), movieDateTxtF.getText(),
-					movieTimeTxtF.getText(),Double.parseDouble(moviePriceTxtF.getText()));
+			Movie newMovie = new Movie(movieNameTxtF.getText(), movieDateTxtF.getText(), movieTimeTxtF.getText(),
+					Double.parseDouble(moviePriceTxtF.getText()));
 			addMovie(movieList, newMovie);
 			try {
-				Movie.managerAddMovieToDB(movieNameTxtF.getText(),movieDateTxtF.getText(),movieTimeTxtF.getText(), moviePriceTxtF.getText());
+				Movie.managerAddMovieToDB(movieNameTxtF.getText(), movieDateTxtF.getText(), movieTimeTxtF.getText(),
+						moviePriceTxtF.getText());
 			} catch (SQLException e1) {
 			}
-			
-			
+
 			window.close();
 		});
 		Button cancelBtn = new Button("Cancel");
 		cancelBtn.setOnAction(e -> window.close());
-		
+
 		VBox layout = new VBox(10);
-		layout.setPadding(new Insets(10,10,10,10));
+		layout.setPadding(new Insets(10, 10, 10, 10));
 		layout.setAlignment(Pos.CENTER);
-		layout.getChildren().addAll(movieNameTxtF, movieDateTxtF,
-				movieTimeTxtF, moviePriceTxtF, submitBtn, cancelBtn);
-		
+		layout.getChildren().addAll(movieNameTxtF, movieDateTxtF, movieTimeTxtF, moviePriceTxtF, submitBtn, cancelBtn);
+
 		Scene confirmScene = new Scene(layout, 300, 200);
 		window.setScene(confirmScene);
 		window.showAndWait();
 	}
-	
+
 	public static void addMovie(TableView<Movie> movieList, Movie movie) {
 		movieList.getItems().add(movie);
 	}
