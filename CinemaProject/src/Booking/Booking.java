@@ -7,30 +7,23 @@ import Concession.MealBuilder;
 import Database.databaseOperations;
 
 public class Booking {
-	private Account account;
-	private Movie movie;
-	private MealBuilder mealbuilder;
+	private String bookingID;
 	
 	
 	
-	public Booking(Account account,Movie movie,MealBuilder mealbuilder) {
-		
-		this.account = account;
-		this.movie = movie;
-		this.mealbuilder = mealbuilder;
-		
-		
-		
-	}
 	
 	
-	public void addBookingToDB(Account account,Movie movie,MealBuilder mealbuilder) throws SQLException {
+	
+	public static void addBookingToDB(Account account,Movie movie,MealBuilder mealbuilder) throws SQLException {
 		
+		 int randomNumber = (int) (Math.random()*(100-1+1)+1);
+		 String bookingID = account.getUserName()+randomNumber;
+		double fullPrice = movie.getMoviePrice()+mealbuilder.getMealPrice();
+		System.out.println(fullPrice);
 		
-		//The meal also needs to be added but I have no idea how need to ask Kristof
-		
-		String Query ="insert into bookings values('"+account.getUserName()+"','"+movie.getMovieName()+"','"+movie.getMovieTime()+"','"+movie.getMovieDate()+"')";
+		String Query ="insert into booking values('"+bookingID+"','"+account.getUserName()+"','"+movie.getMovieName()+"','"+movie.getMovieTime()+"','"+movie.getMovieDate()+"','"+mealbuilder.getMeal()+"','"+fullPrice+"')";
 		databaseOperations.adjustingQuery(Query);
+		System.out.println(Query);
 		
 		
 	}

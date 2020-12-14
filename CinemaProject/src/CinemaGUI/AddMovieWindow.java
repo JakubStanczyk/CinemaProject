@@ -1,5 +1,7 @@
 package CinemaGUI;
 
+import java.sql.SQLException;
+
 import Movie.Movie;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -32,8 +34,14 @@ public class AddMovieWindow {
 		Button submitBtn = new Button("Submit");
 		submitBtn.setOnAction(e -> {
 			Movie newMovie = new Movie(movieNameTxtF.getText(), movieDateTxtF.getText(),
-					movieTimeTxtF.getText(), moviePriceTxtF.getText());
+					movieTimeTxtF.getText(),Double.parseDouble(moviePriceTxtF.getText()));
 			addMovie(movieList, newMovie);
+			try {
+				Movie.managerAddMovieToDB(movieNameTxtF.getText(),movieDateTxtF.getText(),movieTimeTxtF.getText(), moviePriceTxtF.getText());
+			} catch (SQLException e1) {
+			}
+			
+			
 			window.close();
 		});
 		Button cancelBtn = new Button("Cancel");

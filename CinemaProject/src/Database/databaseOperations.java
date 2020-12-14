@@ -3,6 +3,8 @@ import java.sql.*;
 import java.util.ArrayList;
 //Basically will import all the classes that will register anything with the database
 
+import Movie.Movie;
+
 public class databaseOperations {
 
 	public static  Connection getConnection() throws SQLException {
@@ -19,14 +21,19 @@ public class databaseOperations {
 	}
 	
 	
-	public static   void viewingMovieQuery(String query) throws SQLException{
+	public static   ArrayList<Movie> viewingMovieQuery(String query) throws SQLException{
 		
+		ArrayList<Movie>dataInputs = new ArrayList<Movie>();
 		
 		Statement myStatement = getConnection().createStatement();
 		ResultSet myRs = myStatement.executeQuery(query);
+		ArrayList<String> temp = new ArrayList<String>();
 		while(myRs.next()) {
-			System.out.println(myRs.getString("movieName") + "," + myRs.getString("movieGenre"));
+			dataInputs.add(new Movie(myRs.getString("movieName"),myRs.getString("movieDate"),myRs.getString("movieTime"),myRs.getDouble("moviePrice")));
 		}
+		
+		return dataInputs;
+		
 
 		
 	}
@@ -51,7 +58,7 @@ public class databaseOperations {
 		
 		Statement myStatement = getConnection().createStatement();
 		myStatement.executeUpdate(query);
-		System.out.println("Insert Complete");
+		System.out.println("Query Complete");
 		
 		
 		

@@ -1,5 +1,8 @@
 package Concession;
 
+
+
+
 public class MealBuilder {
 	private static String drinkType;
 	private static String foodType;
@@ -9,13 +12,13 @@ public class MealBuilder {
 	private static double foodPrice;
 	private static double mealPrice;
 	
-	public MealBuilder(String drinkType, String foodType, String drink, String flavour, double mealPrice) {
-		MealBuilder.drinkType = drinkType;
+	public MealBuilder(String foodType, String flavour, String drinkType, String drink, double mealPrice) {
 		MealBuilder.foodType = foodType;
-		MealBuilder.drink = drink;
 		MealBuilder.flavour = flavour;
+		MealBuilder.drinkType = drinkType;
+		MealBuilder.drink = drink;
 		MealBuilder.mealPrice = mealPrice;
-		System.out.println(drinkType + drink + foodType + flavour + mealPrice);
+		System.out.println(foodType + flavour + drinkType + drink + mealPrice);
 	}
 
 	public MealBuilder drinkType(String drinkType) {
@@ -51,7 +54,30 @@ public class MealBuilder {
 	
 	public MealBuilder buildMeal() {
 		MealBuilder.mealPrice = drinkPrice + foodPrice;
-		return new MealBuilder(drinkType,foodType,drink, flavour,mealPrice);
-		
+		return new MealBuilder(foodType,flavour,drinkType, drink,mealPrice);
+	}
+	
+	public String getMeal() {
+		return foodType+","+flavour+","+drinkType+","+drink;
+	}
+
+	public String getFoodType() {
+		return foodType;
+	}
+	
+	public String getFlavour() {
+		return flavour;
+	}
+	
+	public String getDrinkType() {
+		return drinkType;
+	}
+	
+	public String getDrink() {
+		return drink;
+	}
+	
+	public Double getMealPrice() {
+		return mealPrice;
 	}
 }

@@ -1,16 +1,21 @@
 package CinemaGUI;
 import Concession.MealBuilder;
+import javafx.stage.Stage;
 import Database.databaseOperations;
 import Control.authorisation;
 import java.sql.SQLException;
-import Account.Account;
+import java.util.ArrayList;
 
-import javafx.stage.Stage;
+import Account.Account;
+import Booking.Booking;
+import Movie.Movie;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 
 public class CinemaGUI {
@@ -19,16 +24,30 @@ public class CinemaGUI {
 	static Scene welcomeManagerScene, manageMovieScene,
 			manageBookingScene, manageConcessionScene;
 	
+	static TableView<Movie> movieTable, viewMovieTable, bookingTable;
+	static TableView<MealBuilder> concessionsTable;
+	static MealBuilder menu = new MealBuilder(null, null, null, null, 0);
 	private static Account account = new Account();
+	static Movie movie = new Movie(null, null, null, 0);
 	
-	public static void display() {
-		
-		
+	public static void display()  {
 		
 		Stage window = new Stage();
 		window.setTitle("Movies");
 		
 		Label welcomeLbl = new Label("Welcome");
+		// instantiate and populate tables
+		
+		concessionsTable = createConcessionsTable();
+		
+		movieTable = createMovieTable();
+		try {
+			movieTable.setItems(getMovies());
+		} catch (SQLException e2) {
+		}
+
+		viewMovieTable = createMovieTable();
+		viewMovieTable.setItems(movieTable.getItems());
 		
 		// Login Page
 		
@@ -37,20 +56,20 @@ public class CinemaGUI {
 		Label loginPasswordLbl = new Label("password");
 		PasswordField loginPasswordPassF = new PasswordField();
 		
-		
-		
-		
 		Button loginBtn = new Button("Login");
 		loginBtn.setOnAction(e -> {
-			
 			try {
 				if(authorisation.authorisationLogin(loginUserTxtF.getText(),loginPasswordPassF.getText())){
 					account.setUsername(loginUserTxtF.getText());
 					welcomeLbl.setText("welcome "+account.getUserName());
 					window.setScene(welcomeScene);
+					loginUserTxtF.clear();
+					loginPasswordPassF.clear();
 				
 				}else if((loginUserTxtF.getText().equals("manager"))&&(loginPasswordPassF.getText().equals("managerPassword"))){
 					window.setScene(welcomeManagerScene);
+					loginUserTxtF.clear();
+					loginPasswordPassF.clear();
 					
 				}
 				else {
@@ -60,6 +79,9 @@ public class CinemaGUI {
 			 catch (SQLException e1) {
 		}
 		});
+		
+			loginUserTxtF.clear();
+			loginPasswordPassF.clear();
 		
 		Button createBtn = new Button("Create Account");
 		createBtn.setOnAction(e -> window.setScene(registerScene));
@@ -75,7 +97,7 @@ public class CinemaGUI {
 		Label registerUserLbl = new Label("username");
 		TextField registerUserTxtF = new TextField();
 		Label registerPasswordLbl = new Label("password");
-		TextField registerPasswordTxtF = new TextField();
+		PasswordField registerPasswordTxtF = new PasswordField();
 		
 		Button registerBtn = new Button("Register");
 		registerBtn.setOnAction(e -> 
@@ -87,6 +109,8 @@ public class CinemaGUI {
 					
 					Account.addNewAccountToDB(registerUserTxtF.getText(),registerPasswordTxtF.getText());
 					window.setScene(loginScene);
+					registerUserTxtF.clear();
+					registerPasswordTxtF.clear();
 				} catch (SQLException e1) {
 					
 					AlertWindow.display("Error","username already in use");
@@ -95,6 +119,7 @@ public class CinemaGUI {
 				}
 				else {
 					AlertWindow.display("Error","fields null or password is in the wrong format");
+					
 				}
 		});
 		
@@ -112,11 +137,10 @@ public class CinemaGUI {
 		
 		// Customer Page
 		
-		Button viewMoviesBtn = new Button("View Movies");
-		viewMoviesBtn.setOnAction(e -> window.setScene(movieScene));
 		
-		Button concessionBtn = new Button("Concessions");
-		concessionBtn.setOnAction(e -> window.setScene(concessionScene));
+		
+		Button viewMoviesBtn = new Button("Make a Movie Booking");
+		viewMoviesBtn.setOnAction(e -> window.setScene(movieScene));
 		
 		Button viewBookingsBtn = new Button("Your Bookings");
 		viewBookingsBtn.setOnAction(e -> window.setScene(bookingScene));
@@ -130,23 +154,41 @@ public class CinemaGUI {
 		VBox welcomeCustomerLayout = new VBox(10);
 		welcomeCustomerLayout.setAlignment(Pos.CENTER);
 		welcomeCustomerLayout.getChildren().addAll(welcomeLbl, viewMoviesBtn,
-				concessionBtn, viewBookingsBtn, accountBtn, logoutBtn);
+				 viewBookingsBtn, accountBtn, logoutBtn);
 		welcomeScene = new Scene(welcomeCustomerLayout, 200, 250);
 		
 		// View Movies Page
 		
-		Label viewMovieLbl = new Label("move times page");
+		Label viewMovieLbl = new Label("movie times page");
+		VBox movieLabelLayout = new VBox(10);
+		movieLabelLayout.getChildren().add(viewMovieLbl);
+		
+		VBox viewMovieLayout = new VBox(10);
+		viewMovieLayout.setAlignment(Pos.CENTER);
+		viewMovieLayout.getChildren().add(viewMovieTable);
+		
+			// buttons
 		Button backMovieBtn = new Button("Back");
 		backMovieBtn.setOnAction(e -> window.setScene(welcomeScene));
 		
 		Button nextMovieBtn = new Button("Next");
-		nextMovieBtn.setOnAction(e -> window.setScene(concessionScene));
+		nextMovieBtn.setOnAction(e -> 
+		{
+		window.setScene(concessionScene);
+		movie = viewMovieTable.getSelectionModel().getSelectedItems().get(0);
 		
-		VBox movieLayout = new VBox(10);
-		movieLayout.setAlignment(Pos.CENTER);
+		});
+		HBox movieCtlLayout = new HBox(10);
+		movieCtlLayout.setPadding(new Insets(10,10,10,10));
+		movieCtlLayout.setAlignment(Pos.CENTER);
+		movieCtlLayout.getChildren().addAll(backMovieBtn, nextMovieBtn);
 		
-		movieLayout.getChildren().addAll(viewMovieLbl, nextMovieBtn, backMovieBtn);
-		movieScene = new Scene(movieLayout, 200, 250);
+			// assemble layout
+		BorderPane movieLayout = new BorderPane();
+		movieLayout.setTop(movieLabelLayout);
+		movieLayout.setCenter(viewMovieLayout);
+		movieLayout.setBottom(movieCtlLayout);
+		movieScene = new Scene(movieLayout, 500, 200);
 		
 		// Concessions Page
 		
@@ -174,7 +216,6 @@ public class CinemaGUI {
 		Button addItemBtn3 = new Button("Choose Drink");
 		Button addItemBtn4 = new Button("Choose Drink");
 		Button addItemBtn5 = new Button("Complete Order");
-		MealBuilder menu = new MealBuilder(null, null, null, null, 0);
 		foodComboBox.setItems(food);
 		addItemBtn.setOnAction(e -> {
 			if((foodComboBox.getValue().equals("Popcorn"))) { 
@@ -245,43 +286,60 @@ public class CinemaGUI {
 				});
 			}
 		});
-		addItemBtn5.setOnAction(e -> menu.buildMeal());
+		addItemBtn5.setOnAction(e -> {
+			menu.buildMeal();
+			concessionsTable.setItems(getConcessions());
+		});
 		
 		concessionLeftLayout.setAlignment(Pos.CENTER);
 		concessionLeftLayout.getChildren().addAll(foodComboBox,addItemBtn,flavourComboBox, addItemBtn2,drinkTComboBox, addItemBtn3, drinkComboBox, addItemBtn4, addItemBtn5);
 		
-			// concession right menu
-		Label orderLbl = new Label("order items go here");
+		// concession right menu
+		Label orderLbl = new Label("Order of Meal");
 		
 		VBox concessionRightLayout = new VBox(10);
 		concessionRightLayout.setAlignment(Pos.CENTER);
-		concessionRightLayout.getChildren().addAll(orderLbl);
+		concessionRightLayout.getChildren().addAll(orderLbl, concessionsTable);
 		
-			// concession bottom menu
+		// concession bottom menu
 		Button backConBtn = new Button("Back");	
+		Button finishBooking = new Button("Finish Booking");
 		backConBtn.setOnAction(e -> window.setScene(welcomeScene));
+		finishBooking.setOnAction(e ->{
+			
+			try {
+				Booking.addBookingToDB(account,movie,menu);
+			} catch (SQLException e1) {
+			System.out.print(e1);
+			}
+			window.setScene(welcomeScene);
+			
+		});
 		
 		VBox concessionBottomLayout = new VBox(10);
 		concessionBottomLayout.setAlignment(Pos.CENTER);
-		concessionBottomLayout.getChildren().add(backConBtn);
+		concessionBottomLayout.getChildren().addAll(backConBtn, finishBooking);
 		
 		BorderPane concessionLayout = new BorderPane();
 		concessionLayout.setTop(concessionTopLayout);
 		concessionLayout.setLeft(concessionLeftLayout);
 		concessionLayout.setRight(concessionRightLayout);
 		concessionLayout.setBottom(concessionBottomLayout);
-		concessionScene = new Scene(concessionLayout, 200, 250);
+		concessionScene = new Scene(concessionLayout, 650, 600);
 		
 		// Bookings Page
 		
 		Label bookingLbl = new Label("bookings page");
 		Button backBookingBtn = new Button("Back");	
 		backBookingBtn.setOnAction(e -> window.setScene(welcomeScene));
+
+		bookingTable = createMovieTable();
+		bookingTable.setItems(getBookings());
 		
 		VBox bookingLayout = new VBox(10);
 		bookingLayout.setAlignment(Pos.CENTER);
-		bookingLayout.getChildren().addAll(bookingLbl, backBookingBtn);
-		bookingScene = new Scene(bookingLayout, 200, 250);
+		bookingLayout.getChildren().addAll(bookingLbl, bookingTable, backBookingBtn);
+		bookingScene = new Scene(bookingLayout, 500, 200);
 		
 		// Account Page
 		
@@ -289,14 +347,13 @@ public class CinemaGUI {
 	
 		Button changePassButton = new Button("Change Password");
 		changePassButton.setOnAction(e -> {
-			ChangePasswordWindow.display(account.getUserName());
+			ChangePasswordWindow.display(null);
 		});
 		Button deleteButton = new Button("Delete Account");
 		deleteButton.setOnAction(e -> {
-			ConfirmWindow.display(account.getUserName());
+			ConfirmWindow.display();
 			window.setScene(loginScene);
-			}
-		);
+		});
 		
 		Button backAccountBtn = new Button("Back");	
 		backAccountBtn.setOnAction(e -> window.setScene(welcomeScene));
@@ -308,7 +365,7 @@ public class CinemaGUI {
 		accountScene = new Scene(accountLayout, 200, 250);
 		
 		// Manager Page
-		
+
 		Label welcomeManagerLbl = new Label("Welcome");
 		
 		Button manageMoviesBtn = new Button("Manage Movies");
@@ -329,15 +386,36 @@ public class CinemaGUI {
 				manageBookingBtn, manageConcessionBtn, managerLogoutBtn);
 		welcomeManagerScene = new Scene(welcomeManagerLayout, 200, 250);
 		
-		// Manage Movies Page
+		// Manage Movies Page	
 		
+			// table/center layout
+		VBox movieTableLayout = new VBox(10);
+		movieTableLayout.getChildren().add(movieTable);
+		
+			// bottom layout
 		Button backMgMovieBtn = new Button("Back");	
 		backMgMovieBtn.setOnAction(e -> window.setScene(welcomeManagerScene));
 		
-		VBox manageMovieLayout = new VBox(10);
-		manageMovieLayout.setAlignment(Pos.CENTER);
-		manageMovieLayout.getChildren().addAll(backMgMovieBtn);
-		manageMovieScene = new Scene(manageMovieLayout, 200, 200);
+		Button addMovieBtn = new Button("Add");
+		addMovieBtn.setOnAction(e -> {
+			AddMovieWindow.display(movieTable);
+		});
+		
+		Button deleteMovieBtn = new Button("Delete");
+		deleteMovieBtn.setOnAction(e -> deleteMovie());
+		
+		HBox movieButtonLayout = new HBox(10);
+		
+		movieButtonLayout.setAlignment(Pos.CENTER);
+		movieButtonLayout.setPadding(new Insets(10,10,10,10));
+		movieButtonLayout.getChildren().addAll(addMovieBtn,
+				deleteMovieBtn, backMgMovieBtn);
+		
+			// assemble final layout
+		BorderPane manageMovieLayout = new BorderPane();
+		manageMovieLayout.setCenter(movieTableLayout);
+		manageMovieLayout.setBottom(movieButtonLayout);
+		manageMovieScene = new Scene(manageMovieLayout, 500, 200);
 		
 		// Manage Bookings Page
 		
@@ -359,8 +437,101 @@ public class CinemaGUI {
 		manageConcessionLayout.getChildren().addAll(backMgConcessionBtn);
 		manageConcessionScene = new Scene(manageConcessionLayout, 200, 200);
 	}
+	
+	private static TableView<MealBuilder> createConcessionsTable() {
+		TableColumn<MealBuilder, String> typeColumn = new TableColumn<>("Type of Food");
+		typeColumn.setMinWidth(100);
+		typeColumn.setCellValueFactory(new PropertyValueFactory<MealBuilder, String>("foodType"));
+		
+		TableColumn<MealBuilder, String> flavourColumn = new TableColumn<>("Flavour Chosen");
+		flavourColumn.setMinWidth(100);
+		flavourColumn.setCellValueFactory(new PropertyValueFactory<MealBuilder, String>("flavour"));
+		
+		TableColumn<MealBuilder, String> tDrinkColumn = new TableColumn<>("Type of Drink");
+		tDrinkColumn.setMinWidth(100);
+		tDrinkColumn.setCellValueFactory(new PropertyValueFactory<MealBuilder, String>("drinkType"));
+		
+		TableColumn<MealBuilder, String> drinkColumn = new TableColumn<>("Drink Chosen");
+		drinkColumn.setMinWidth(100);
+		drinkColumn.setCellValueFactory(new PropertyValueFactory<MealBuilder, String>("drink"));
+		
+		TableColumn<MealBuilder, Double> priceColumn = new TableColumn<>("Price of Order");
+		priceColumn.setMinWidth(100);
+		priceColumn.setCellValueFactory(new PropertyValueFactory<MealBuilder, Double>("mealPrice"));
 
-	private static void addItemtoOrder() {
-		System.out.println("TODO implement add item to order");
+		TableView<MealBuilder> table = new TableView<>();
+		table.getColumns().addAll(typeColumn,flavourColumn , tDrinkColumn, drinkColumn, priceColumn);
+		
+		return table;
+	}
+
+	private static TableView<Movie> createMovieTable() {
+		TableColumn<Movie, String> movieNameCol = new TableColumn<>("Title");
+		movieNameCol.setMinWidth(200);
+		movieNameCol.setCellValueFactory(new PropertyValueFactory<>("movieName"));
+		
+		TableColumn<Movie, String> movieDateCol = new TableColumn<>("Date");
+		movieDateCol.setMinWidth(100);
+		movieDateCol.setCellValueFactory(new PropertyValueFactory<>("movieDate"));
+		
+		TableColumn<Movie, String> movieTimeCol = new TableColumn<>("Time");
+		movieTimeCol.setMinWidth(100);
+		movieTimeCol.setCellValueFactory(new PropertyValueFactory<>("movieTime"));
+		
+		TableColumn<Movie, String> moviePriceCol = new TableColumn<>("Price");
+		moviePriceCol.setMinWidth(100);
+		moviePriceCol.setCellValueFactory(new PropertyValueFactory<>("moviePrice"));
+
+		TableView<Movie> table = new TableView<>();
+		table.getColumns().addAll(movieNameCol, movieDateCol, movieTimeCol, moviePriceCol);
+		
+		return table;
+	}
+	
+	private static ObservableList<MealBuilder> getConcessions() {
+		ObservableList<MealBuilder> concessions = FXCollections.observableArrayList();
+		concessions.add(new MealBuilder(menu.getFoodType(), menu.getFlavour(), menu.getDrinkType(), menu.getDrink(), menu.getMealPrice()));
+		return concessions;
+	}
+
+	
+	public static ObservableList<Movie> getMovies() throws SQLException {
+		ObservableList<Movie> movies = FXCollections.observableArrayList();
+		ArrayList<Movie> moviesFromDB = databaseOperations.viewingMovieQuery("select * from movies");
+		for (int i = 0; i < moviesFromDB.size();i++) {
+			movies.add(moviesFromDB.get(i));
+		}
+		
+		
+		return movies;
+	}
+	
+	public static ObservableList<Movie> getBookings() {
+		ObservableList<Movie> bookings = FXCollections.observableArrayList();
+		bookings.add(new Movie("bookingTest", "12/12", "13:00", 10.00));
+		return bookings;
+	}
+	
+	public static void deleteMovie() {
+		ObservableList<Movie> movieSelected, allMovies;
+		allMovies = movieTable.getItems();
+		movieSelected = movieTable.getSelectionModel().getSelectedItems();
+		 Movie selectedToDelete = movieTable.getSelectionModel().getSelectedItems().get(0);
+		 movieSelected.forEach(allMovies::remove);
+		 try {
+			Movie.managerDeleteMovieFromDB(selectedToDelete.getMovieName());
+		} catch (SQLException e) {
+			
+		}
+		 
+		}
+		 
+		 public static Movie setMovie() {
+				ObservableList<Movie> movieSelected;
+				movieSelected = movieTable.getSelectionModel().getSelectedItems();
+				 Movie selectedToDelete = movieTable.getSelectionModel().getSelectedItems().get(0);
+				 return  movieTable.getSelectionModel().getSelectedItems().get(0);
+		
+		
 	}
 }
